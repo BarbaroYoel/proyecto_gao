@@ -1,15 +1,11 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-from datetime import datetime
-from pathlib import Path
 
 
 def main():
     st.set_page_config(
-        page_title="Proyecto Gao", layout="wide", page_icon="assets/gao_icon.ico"
-    )
-
+        page_title="Proyecto Gao",
+        layout="wide",
+        page_icon="assets/gao_icon.ico")
     with st.sidebar:
       st.title("Proyecto Gao")
       st.image("assets/logo.png")
