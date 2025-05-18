@@ -5,7 +5,7 @@ import os
 import sys
 from google import genai
 
-genai_client = genai.Client(api_key="AIzaSyBdGobHm6D5CLDOKkLdg600uHwmbajXAUM")
+genai_client = genai.Client(api_key="")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 dir_raw = os.path.join(BASE_DIR, "data", "raw")
