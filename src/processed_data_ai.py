@@ -5,7 +5,7 @@ import os
 import sys
 from google import genai
 
-genai_client = genai.Client(api_key="")
+genai_client = genai.Client(api_key="AIzaSyAZkyNvfJun_-AWAx_rG3ioT_ksTzJGAjM")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 dir_raw = os.path.join(BASE_DIR, "data", "raw")
@@ -212,10 +212,12 @@ with open(output_path, "a", newline="", encoding="utf-8") as fo:
                 amenidades = processed_data.get("Amenidades", [])
                 amenidades_str = ", ".join(str(a).strip() for a in amenidades if a)
                 
+                titulo_limpio = " ".join(processed_data["Titulo"].split())
+                print(titulo_limpio)
                 out_row = {
                     "ID": processed_data["ID"],
                     "Fuente": source,
-                    "Titulo": processed_data["Titulo"],
+                    "Titulo": titulo_limpio,
                     "Tipo": processed_data["Tipo"],
                     "Categoria": processed_data["Categoria"],
                     "Precio": processed_data["Precio"],
