@@ -4,6 +4,7 @@ import Inicio as inicio
 
 def main():
     inicio.page_config()
+    inicio.google_analytics()
    
    
     with st.sidebar:
