@@ -3,6 +3,7 @@ import Inicio as inicio
 
 def main():
     inicio.page_config()
+    inicio.google_analytics()
     inicio.sidebar_config()
     
     
