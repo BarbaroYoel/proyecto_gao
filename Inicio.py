@@ -1,23 +1,6 @@
 import streamlit as st
 
 
-def google_analytics():
-    st.markdown(
-        """
-       <!-- Google tag (gtag.js) -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-KR80YYWDZW"></script>
-       <script>
-       window.dataLayer = window.dataLayer || [];
-       function gtag(){dataLayer.push(arguments);}
-       gtag('js', new Date());
-
-       gtag('config', 'G-KR80YYWDZW');
-       </script>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def page_config():
     st.set_page_config(
         page_title="Proyecto Gao",
@@ -63,7 +46,6 @@ def flooter():
 
 def main():
     page_config()
-    google_analytics()
     sidebar_config()
 
     st.title("Bienvenido a Proyecto Gao 🏘️")
