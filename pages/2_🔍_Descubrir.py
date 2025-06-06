@@ -2,13 +2,7 @@ import streamlit as st
 import Inicio as inicio
 
 
-def main():
-    inicio.page_config()
-    inicio.google_analytics()
-   
-    with st.sidebar:
-      st.title("Proyecto Gao")
-      st.image("assets/logo.png")
+def display_descubrir():
     
     st.title("Descubrir: Dashboard Inmobiliario 📊")
     st.markdown("---")
@@ -21,10 +15,18 @@ def main():
         ofrecerte una comprensión clara de sus datos.
         """
     )
-   
+
+def descubir_page():
+    inicio.page_config()
+
+    with st.sidebar:
+      st.title("Proyecto Gao")
+      st.image("assets/logo.png")
+
+    display_descubrir()
     inicio.navegation()
     inicio.flooter()
 
 
 if __name__ == "__main__":
-    main()
+    descubir_page()

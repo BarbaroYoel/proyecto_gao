@@ -1,21 +1,6 @@
 import streamlit as st
 
 
-def google_analytics():
-    st.markdown(
-        """
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KR80YYWDZW"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-KR80YYWDZW');
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
-
 def page_config():
     st.set_page_config(
         page_title="Proyecto Gao",
@@ -23,12 +8,10 @@ def page_config():
         page_icon="assets/gao_icon.ico",
     )
 
-
 def sidebar_config():
     with st.sidebar:
         st.title("Proyecto Gao")
         st.image("assets/logo.png")
-
 
 def navegation():
     st.markdown("---")
@@ -45,7 +28,6 @@ def navegation():
         """
         )
 
-
 def flooter():
     st.markdown("---")
     st.markdown(
@@ -58,12 +40,7 @@ def flooter():
         unsafe_allow_html=True,
     )
 
-
-def main():
-    page_config()
-    google_analytics()
-    sidebar_config()
-
+def display_inicio():
     st.title("Bienvenido a Proyecto Gao 🏘️")
     st.markdown("---")
 
@@ -115,10 +92,14 @@ def main():
     - 💡 Innovar en la visualización de datos inmobiliarios
     """
     )
-
+    
+def inicio_page():
+    page_config()
+    sidebar_config()
+    display_inicio()
     navegation()
     flooter()
 
 
 if __name__ == "__main__":
-    main()
+    inicio_page()

@@ -1,12 +1,7 @@
 import streamlit as st
 import Inicio as inicio
 
-def main():
-    inicio.page_config()
-    inicio.google_analytics()
-    inicio.sidebar_config()
-    
-    
+def display_blog():
     st.title("Blog: Análisis del Mercado Inmobiliario 📰")
     st.markdown("---")
     
@@ -48,9 +43,15 @@ def main():
         """
     )
 
+
+
+def blog_page():
+    inicio.page_config()
+    inicio.sidebar_config()
+    display_blog()
     inicio.navegation()
     inicio.flooter()
     
     
 if __name__ == "__main__":
-    main()
+    blog_page()

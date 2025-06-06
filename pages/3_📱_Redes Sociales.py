@@ -1,12 +1,7 @@
 import streamlit as st
 import Inicio as inicio
 
-
-def main():
-    inicio.page_config()
-    inicio.google_analytics()
-    inicio.sidebar_config()
-    
+def display_redes_sociales():
     st.title("Redes Sociales: Mantente Conectado 📱")
     st.markdown("---") 
     st.header("Redes Sociales")
@@ -27,10 +22,14 @@ def main():
 
     st.header("Contactos")
     st.write( "📧 gao.cuba2025@gmail.com")
-    
+
+def redes_sociales_page():
+    inicio.page_config()
+    inicio.sidebar_config()
+    display_redes_sociales()
     inicio.navegation()
     inicio.flooter()
 
 
 if __name__ == "__main__":
-    main() 
+    redes_sociales_page() 
