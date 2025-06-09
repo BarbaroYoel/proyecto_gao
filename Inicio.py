@@ -15,18 +15,18 @@ def sidebar_config():
 
 def navegation():
     st.markdown("---")
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown(
-            """
-        ### 🚀 Comienza a Explorar
-        
-        Utiliza la barra de navegación a la izquierda para:
-        - 📰 Leer nuestro Blog con análisis detallados 
-        - 🔍 Explorar el Dashboard interactivo
-        - 📱 Contactarnos y seguirnos en redes sociales
-        """
-        )
+    st.markdown(
+    """
+    <div style='text-align: center;'>
+        <p>🚀 Comienza a Explorar</p>
+        <p>Utiliza la barra de navegación a la izquierda para:</p>
+        <p>- 📰 Leer nuestro Blog con análisis detallados</p>
+        <p>- 🔍 Explorar el Dashboard interactivo</p>
+        <p>- 📱 Contactarnos y seguirnos en redes sociales</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 def flooter():
     st.markdown("---")

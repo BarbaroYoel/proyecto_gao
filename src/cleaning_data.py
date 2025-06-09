@@ -7,15 +7,17 @@ def cleaning_data_frame_by_category(
 
     df=cleaning_data_frame(df)
    
-    if category == "venta":
+    if category == "venta" or category == "alquiler" or category=="permuta":
         df = df[(df["Categoria"] == category)].copy()
-        df = remove_outliers(df, min_outliner, max_outliner)
     
     elif category == "alquiler":
         df = df[(df["Categoria"] == category)].copy()
-        df = remove_outliers(df, min_outliner, max_outliner)
+    
+    elif category=="permuta":
+        df = df[(df["Categoria"] == category)].copy()
     else:
         raise ValueError(f"Categoría '{category}' no encontrada")
+    df = remove_outliers(df, min_outliner, max_outliner)
 
     return df
 
@@ -45,6 +47,9 @@ def clean_price(df: pd.DataFrame) -> pd.DataFrame:
             ]
     
     df.loc[:,"Precio"]=np.select(conditions,values,df["Precio"])
+    
+    df["Moneda"] = "USD"
+    
     return df
 
 
@@ -63,4 +68,9 @@ def clean_locations(df:pd.DataFrame)->pd.DataFrame:
             return []
     
     df["Ubicacion"] = df["Ubicacion"].apply(_clean_locations)
+    
+    df["Municipio"] = df["Ubicacion"].apply(lambda x: x[0] if len(x) > 1 else None)
+    df["Provincia"] = df["Ubicacion"].apply(lambda x: x[1] if len(x) > 2 else None)
+
+    df.drop(columns=["Ubicacion"], inplace=True)
     return df

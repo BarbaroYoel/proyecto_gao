@@ -6,14 +6,14 @@ def display_redes_sociales():
     st.markdown("---") 
     st.header("Redes Sociales")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col3 = st.columns(2)
     with col1:
       st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/132px-Instagram_logo_2016.svg.png", width=50)
       st.markdown("[Instagram](https://www.instagram.com/proyectogao)")
    
-    with col2:
-      st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/150px-Facebook_Logo_%282019%29.png", width=50)
-      st.markdown("[Facebook](https://facebook.com/proyecto_gao)")
+    # with col2:
+    #   st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/150px-Facebook_Logo_%282019%29.png", width=50)
+    #   st.markdown("[Facebook](https://facebook.com/proyecto_gao)")
 
       
     with col3:
