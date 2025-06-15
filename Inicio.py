@@ -1,28 +1,19 @@
 import streamlit as st
 from streamlit.components.v1 import html
 
-# 1. CONFIGURACIÓN DE PÁGINA - DEBE SER ABSOLUTAMENTE PRIMERO
 st.set_page_config(
     page_title="Proyecto Gao",
     layout="wide",
     page_icon="assets/gao_icon.ico",
 )
 
-# 2. GOOGLE ANALYTICS - Inmediatamente después
-GA_ID = "G-TTV23M3QPB"
-ga_script = f"""
-<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
-  gtag('js', new Date());
-  gtag('config', '{GA_ID}');
-</script>
+simple_analytics_code = """
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 """
-html(ga_script, width=0, height=0)
 
-# 3. ELIMINA LA FUNCIÓN page_config() COMPLETAMENTE
-# (ya no es necesaria porque la configuración está arriba)
+# Inyectar el código de seguimiento
+html(simple_analytics_code, width=0, height=0)
 
 def sidebar_config():
     with st.sidebar:
@@ -109,15 +100,12 @@ def display_inicio():
     """
     )
     
-# 4. MODIFICA inicio_page() PARA ELIMINAR page_config()
 def inicio_page():
-    # Esta línea ha sido eliminada: page_config()
     sidebar_config()
     display_inicio()
     navegation()
     flooter()
 
-# 5. EL CÓDIGO DE GOOGLE ANALYTICS SE HA MOVIDO ARRIBA
 
 if __name__ == "__main__":
     inicio_page()
