@@ -1,6 +1,12 @@
 import streamlit as st
 import Inicio as inicio
 
+st.set_page_config(
+    page_title="Proyecto Gao",
+    layout="wide",
+    page_icon="assets/gao_icon.ico",
+)
+
 def display_blog():
     st.title("Blog: Análisis del Mercado Inmobiliario 📰")
     st.markdown("---")
@@ -46,7 +52,6 @@ def display_blog():
 
 
 def blog_page():
-    inicio.page_config()
     inicio.sidebar_config()
     display_blog()
     inicio.navegation()

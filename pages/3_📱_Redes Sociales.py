@@ -1,6 +1,12 @@
 import streamlit as st
 import Inicio as inicio
 
+st.set_page_config(
+    page_title="Proyecto Gao",
+    layout="wide",
+    page_icon="assets/gao_icon.ico",
+)
+
 def display_redes_sociales():
     st.title("Redes Sociales: Mantente Conectado 📱")
     st.markdown("---") 
@@ -24,7 +30,6 @@ def display_redes_sociales():
     st.write( "📧 gao.cuba2025@gmail.com")
 
 def redes_sociales_page():
-    inicio.page_config()
     inicio.sidebar_config()
     display_redes_sociales()
     inicio.navegation()

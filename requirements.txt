@@ -1,7 +1,7 @@
 streamlit
 numpy
 pandas
-matplotlib.pyplot
+matplotlib
 seaborn
 requests
 beautifulsoup4

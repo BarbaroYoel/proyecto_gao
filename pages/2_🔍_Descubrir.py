@@ -5,6 +5,11 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.set_page_config(
+    page_title="Proyecto Gao",
+    layout="wide",
+    page_icon="assets/gao_icon.ico",
+)
 
 parent_directory=os.getcwd()
 print(parent_directory)
@@ -284,7 +289,6 @@ def show_kpis(df:pd.DataFrame)->pd.DataFrame :
 
 
 def descubir_page():
-    inicio.page_config()
 
     with st.sidebar:
       st.title("Proyecto Gao")
