@@ -8,8 +8,11 @@ st.set_page_config(
 )
 
 simple_analytics_code = """
-<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+<!-- Simple Analytics - Lite Mode para Streamlit -->
+<script async defer src="https://lite.simpleanalyticscdn.com/latest.js"></script>
+<noscript>
+  <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+</noscript>
 """
 
 # Inyectar el código de seguimiento
