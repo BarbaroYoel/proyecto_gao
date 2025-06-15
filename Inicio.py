@@ -7,16 +7,17 @@ st.set_page_config(
     page_icon="assets/gao_icon.ico",
 )
 
-simple_analytics_code = """
-<!-- Simple Analytics - Lite Mode para Streamlit -->
-<script async defer src="https://lite.simpleanalyticscdn.com/latest.js"></script>
-<noscript>
-  <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
-</noscript>
-"""
+def inject_simple_analytics():
+    analytics_code = """
+    <!-- Simple Analytics - Lite Mode para Streamlit -->
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript>
+        <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" 
+        referrerpolicy="no-referrer-when-downgrade" />
+    </noscript>
+    """
+    html(analytics_code, width=0, height=0)
 
-# Inyectar el código de seguimiento
-html(simple_analytics_code, width=0, height=0)
 
 def sidebar_config():
     with st.sidebar:
@@ -108,6 +109,8 @@ def inicio_page():
     display_inicio()
     navegation()
     flooter()
+    
+    inject_simple_analytics()
 
 
 if __name__ == "__main__":
