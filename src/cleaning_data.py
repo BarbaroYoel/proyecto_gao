@@ -43,7 +43,7 @@ def clean_price(df: pd.DataFrame) -> pd.DataFrame:
 
     values=[ df["Precio"]*1.1,
              df["Precio"]/360,
-             df["Precio"]*1
+             df["Precio"]*1.1
             ]
     
     df.loc[:,"Precio"]=np.select(conditions,values,df["Precio"])

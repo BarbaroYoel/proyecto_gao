@@ -1,22 +1,12 @@
 import streamlit as st
-from streamlit.components.v1 import html
 
-st.set_page_config(
-    page_title="Proyecto Gao",
-    layout="wide",
-    page_icon="assets/gao_icon.ico",
-)
+def page_config():
+    st.set_page_config(
+        page_title="Proyecto Gao",
+        layout="wide",
+        page_icon="assets/gao_icon.ico",
+    )
 
-def inject_simple_analytics():
-    analytics_code = """
-    <!-- Simple Analytics - Lite Mode para Streamlit -->
-    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <noscript>
-        <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" 
-        referrerpolicy="no-referrer-when-downgrade" />
-    </noscript>
-    """
-    html(analytics_code, width=0, height=0)
 
 
 def sidebar_config():
@@ -25,7 +15,6 @@ def sidebar_config():
         st.image("assets/logo.png")
 
 def navegation():
-    st.markdown("---")
     st.markdown(
     """
     <div style='text-align: center;'>
@@ -38,9 +27,9 @@ def navegation():
     """,
     unsafe_allow_html=True
 )
+    st.markdown("---")
 
 def flooter():
-    st.markdown("---")
     st.markdown(
         """
     <div style='text-align: center'>
@@ -50,6 +39,7 @@ def flooter():
     """,
         unsafe_allow_html=True,
     )
+    st.markdown("---")
 
 def display_inicio():
     st.title("Bienvenido a Proyecto Gao 🏘️")
@@ -67,6 +57,7 @@ def display_inicio():
        - 📈 Visualizar datos históricos y actuales
        """
     )
+    st.markdown("---")
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -103,14 +94,16 @@ def display_inicio():
     - 💡 Innovar en la visualización de datos inmobiliarios
     """
     )
+    st.markdown("---")
+    
     
 def inicio_page():
+    page_config()
     sidebar_config()
     display_inicio()
     navegation()
     flooter()
     
-    inject_simple_analytics()
 
 
 if __name__ == "__main__":
