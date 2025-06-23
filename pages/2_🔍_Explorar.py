@@ -14,6 +14,7 @@ sys.path.append(parent_directory)
 import src.cleaning_data as cln
 import src.analysis as anl
 
+
 @st.cache_data
 def load_all_data()-> pd.DataFrame:
     path=os.getcwd()
@@ -22,7 +23,6 @@ def load_all_data()-> pd.DataFrame:
     
     df_rent= cln.cleaning_data_frame_by_category(df,"alquiler",min_outliner=10,max_outliner=1500)
     df_sale = cln.cleaning_data_frame_by_category(df,"venta",min_outliner=1000,max_outliner=1500000)
-    
     return pd.concat([df_rent,df_sale],ignore_index=True)
 
 def load_data(category:str)-> pd.DataFrame :
@@ -35,7 +35,6 @@ def load_data(category:str)-> pd.DataFrame :
 
     elif category=="Ventas" :
       df = cln.cleaning_data_frame_by_category(df,"venta",min_outliner=1000,max_outliner=1500000)
-    
     return df
 
 
@@ -65,9 +64,9 @@ def show_general_kpis(df:pd.DataFrame)->None:
     col4.metric("📍 Municipio con más Propiedades",municipal_top)
     
     col1,col2,col3,col4=st.columns(4)
-    col1.metric("💰 Precio Medio Alquiler",f"${price_rent_mean:,.0f} USD")
+    col1.metric("💰 Precio Promedio Alquiler",f"${price_rent_mean:,.0f} USD")
     col2.metric("💵 Precio Mediano Alquiler",f"${price_rent_median:,.0f} USD")
-    col3.metric("💰 Precio Medio Venta",f"${price_sale_mean:,.0f} USD")
+    col3.metric("💰 Precio Promedio Venta",f"${price_sale_mean:,.0f} USD")
     col4.metric("💵 Precio Mediano Venta",f"${price_sale_median:,.0f} USD")
 
     st.markdown("---")
@@ -77,22 +76,21 @@ def show_general_charts(df: pd.DataFrame) -> None:
     st.subheader("📊 Visualizaciones Generales del Mercado")
     
     col1, col2 = st.columns(2)
-    
     with col1:
         fig1 = anl.plot_properties_by_municipality(df, top_n=10)
         st.plotly_chart(fig1, use_container_width=True)
-    
     with col2:
         fig2 = anl.plot_category_distribution(df)
         st.plotly_chart(fig2, use_container_width=True)
-    
+   
     col3, col4 = st.columns(2)
-    
     with col3:
         fig3 = anl.plot_property_type_distribution(df)
         if fig3:
             st.plotly_chart(fig3, use_container_width=True)
-    
+    with col4:
+        fig4 = anl.plot_amenities_by_property_type(df, top_n=10)
+        st.plotly_chart(fig4, use_container_width=True)
     
     st.markdown("---")
 
@@ -103,8 +101,10 @@ def show_kpis(df:pd.DataFrame)->None:
     
     number_of_houses=len(df[df["Tipo"]=="casa"])
     number_of_apartments=len(df[df["Tipo"]=="apartamento"])  
+   
     mean_price = df["Precio"].mean()
     median_price = df["Precio"].median()
+   
     mean_rooms = df["Cuartos"].mean()
     mean_baths = df["Banos"].mean()
     
@@ -134,26 +134,29 @@ def show_kpis(df:pd.DataFrame)->None:
     col9.metric("📞 Con Teléfono Fijo", f"{phone_pct:.1f}%")
     
     st.markdown("---")
-
+    
 def show_specific_charts(df: pd.DataFrame) -> None:
     st.subheader("📈 Visualizaciones Específicas de los Datos Filtrados")
     
     if not df.empty:
-        st.markdown("### Precio Promedio y Mediano por Municipio")
         fig1 = anl.plot_price_by_municipality(df)
         st.plotly_chart(fig1, use_container_width=True)
     
     if not df.empty and 'Fecha' in df:
-        st.markdown("### Evolución de Precios por Tipo de Propiedad")
         fig2 = anl.plot_price_trend_by_property_type(df)
         st.plotly_chart(fig2, use_container_width=True)
 
-    
     if not df.empty and 'Fecha' in df:
-        st.markdown("### Evolución de Precio Promedio (Filtrado)")
         fig4 = anl.plot_price_trend(df)
         st.plotly_chart(fig4, use_container_width=True)
-   
+    
+    if not df.empty and 'Amenidades' in df:
+        fig_amenities = anl.plot_amenities_distribution(df, top_n=10)
+        if fig_amenities:
+            st.plotly_chart(fig_amenities, use_container_width=True)
+
+
+
 
 def descubir_page():
     inicio.page_config()
@@ -165,7 +168,10 @@ def descubir_page():
       category = st.radio("Seleccione la categoría:",["Alquileres","Ventas"])
 
       df = load_data(category)
-      
+     
+      year_range = st.slider("Rango de Años:",2022,2025,(2022,2025))
+     
+     
       municipality = df['Municipio'].dropna().unique().tolist()
       seleccion_mun =st.multiselect("Municipios",municipality,default= ["Centro Habana","La Habana Vieja","Plaza de la Revolución","Cerro","Playa"])
        
@@ -182,11 +188,14 @@ def descubir_page():
         (df["Municipio"].isin(seleccion_mun)) &
         (df['Precio'] >= range_price[0]) & (df['Precio'] <= range_price[1]) &
         (df['Cuartos'] >= rooms[0]) & (df['Cuartos'] <= rooms[1]) &
-        (df['Banos'] >= baths[0]) & (df['Banos'] <= baths[1])
+        (df['Banos'] >= baths[0]) & (df['Banos'] <= baths[1])& 
+        ((df['Fecha'].dt.year >= year_range[0]) & 
+        (df['Fecha'].dt.year <= year_range[1]))
     ]
 
     st.header("Explorar: Visión del Mercado Inmobiliario 🔍")
     st.markdown("---")
+
     
     df_all=load_all_data()
     show_general_kpis(df_all)
@@ -194,9 +203,27 @@ def descubir_page():
     
     st.header(f'Datos filtrados de {category} :')
     st.markdown("---")
+    st.markdown(f"""
+    - **Municipios:** {', '.join(seleccion_mun) if seleccion_mun else 'Todos'}
+    - **Precio:** ${range_price[0]:,.0f} - ${range_price[1]:,.0f} USD
+    - **Habitaciones:** {rooms[0]} - {rooms[1]}
+    - **Baños:** {baths[0]} - {baths[1]}
+    """)
+    st.markdown("---")
+    
     show_kpis(df_filtered)
     show_specific_charts(df_filtered)    
 
+    
+
+    st.warning("""
+        ⚠️ Este proyecto es una herramienta de análisis y no debe ser considerado como asesoramiento legal o financiero. 
+        Los datos son proporcionados con fines informativos y pueden no reflejar la realidad del mercado inmobiliario.
+        Proyecto GAO no se hace responsable por decisiones tomadas en base a esta información. 
+        Cualquier acción relacionada con el mercado inmobiliario es bajo su propia responsabilidad
+    """)
+    st.markdown("---")  
+    
     inicio.navegation()
     inicio.flooter()
 

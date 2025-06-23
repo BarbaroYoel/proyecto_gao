@@ -1,0 +1,28 @@
+{
+  "provincia": "La Habana",
+  "viviendas_terminadas": [
+    {"año": 2020, "cantidad": 5436},
+    {"año": 2021, "cantidad": 4692},
+    {"año": 2022, "cantidad": 2875},
+    {"año": 2023, "cantidad": 1394},
+    {"año": 2024, "cantidad": 454}
+  ],
+  "salario_medio": {
+    "año": 2024,
+    "valor": 6449,
+    "moneda": "CUP"
+  },
+  "demografia": {
+    "2023": {
+      "poblacion": 1814207,
+      "nacimientos": 10783,
+      "muertes_generales": 27864,
+      "muertes_infantiles": 110
+    },
+    "2024": {
+      "poblacion": 1749970
+    },
+    "saldo_migratorio_2023": -47156
+  },
+  "fuente":"ONEI"
+}

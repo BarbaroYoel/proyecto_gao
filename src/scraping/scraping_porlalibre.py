@@ -22,7 +22,7 @@ os.makedirs(output_raw_dir, exist_ok=True)
 
 csv_filepath = os.path.join(output_raw_dir, "porlalivre.csv")
 processed_ids_filepath = os.path.join(output_raw_dir, "porlalivre_raw_ids.json")
-
+ 
 print(f"CSV de salida: {csv_filepath}")
 print(f"JSON de IDs procesados: {processed_ids_filepath}")
 

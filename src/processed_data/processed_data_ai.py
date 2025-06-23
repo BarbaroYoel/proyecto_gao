@@ -5,7 +5,7 @@ import os
 import sys
 from google import genai
 
-genai_client = genai.Client(api_key="AIzaSyAZkyNvfJun_-AWAx_rG3ioT_ksTzJGAjM")
+genai_client = genai.Client(api_key="")
 
 BASE_DIR =os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 dir_raw = os.path.join(BASE_DIR, "data", "raw")
@@ -18,7 +18,7 @@ processed_ids_json = os.path.join(dir_processed, "processed_ids.json")
 input_path = os.path.join(dir_raw, input_filename)
 output_path = os.path.join(dir_processed, output_filename)
 
-
+ 
 if not os.path.exists(input_path):
     print(f"Error: no se encontro '{input_path}'")
     sys.exit(1)

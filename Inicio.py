@@ -7,8 +7,6 @@ def page_config():
         page_icon="assets/gao_icon.ico",
     )
 
-
-
 def sidebar_config():
     with st.sidebar:
         st.title("Proyecto Gao")
@@ -40,6 +38,17 @@ def flooter():
         unsafe_allow_html=True,
     )
     st.markdown("---")
+    
+def warning():
+    st.warning("""
+        ⚠️ Este proyecto es una herramienta de análisis y no debe ser considerado como asesoramiento legal o financiero. 
+        Los datos son proporcionados con fines informativos y pueden no reflejar la realidad del mercado inmobiliario.
+        Proyecto GAO no se hace responsable por decisiones tomadas en base a esta información. 
+        Cualquier acción relacionada con el mercado inmobiliario es bajo su propia responsabilidad
+    """)
+    st.markdown("---")  
+
+
 
 def display_inicio():
     st.title("Bienvenido a Proyecto Gao 🏘️")
@@ -51,9 +60,8 @@ def display_inicio():
        
        Proyecto Gao es una herramienta de análisis del mercado inmobiliario en La Habana que te permite:
        
-       - 📊 Explorar tendencias de precios por municipio
+       - 📊 Explorar tendencias por municipio
        - 🏠 Analizar diferentes tipos de propiedades
-       - 🔍 Descubrir oportunidades en el mercado
        - 📈 Visualizar datos históricos y actuales
        """
     )
@@ -96,11 +104,13 @@ def display_inicio():
     )
     st.markdown("---")
     
+  
     
 def inicio_page():
     page_config()
     sidebar_config()
     display_inicio()
+    warning()
     navegation()
     flooter()
     

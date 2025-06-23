@@ -10,11 +10,7 @@ URL = "https://www.revolico.com/"
 MAX_PAGE = 80
 print(f"Se procesarán las primeras {MAX_PAGE} páginas.")
 
-# --- Configuración de rutas (sin cambios) ---
-# Se asume que el script está en un subdirectorio, ajusta si es necesario
 script_dir = os.path.dirname(os.path.abspath(__file__))
-# Si 'gao_dir' no es lo que esperas, puedes definir la ruta directamente
-# Ejemplo: output_raw_dir = os.path.join('data', 'raw')
 gao_dir = os.path.dirname(os.path.dirname(script_dir))
 output_raw_dir = os.path.join(gao_dir, 'data', 'raw')
 csv_filepath = os.path.join(output_raw_dir, 'revolico.csv')
@@ -25,7 +21,6 @@ print(f"Ruta de salida configurada en: {output_raw_dir}")
 print(f"Archivo CSV de salida será: {csv_filepath}")
 print(f"Archivo de IDs procesados será: {processed_ids_filepath}")
 
-# --- Configuración de Scraper (sin cambios) ---
 scraper_options = {
     'browser': 'chrome',
     'delay': 10
@@ -35,7 +30,6 @@ session.headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
 scraper = cloudscraper.create_scraper(sess=session, **scraper_options)
 
-# --- Carga de IDs procesados (sin cambios) ---
 processed_ad_ids = set()
 try:
     with open(processed_ids_filepath, 'r') as f:
@@ -46,7 +40,6 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     print("Error al decodificar el archivo de IDs procesados. Se iniciará un nuevo seguimiento.")
 
-# --- Encabezados del CSV (sin cambios) ---
 headers = [
     "ID", "Titulo", "Precio", "Ubicacion", "Descripcion",
     "Nombre", "Contactos", "Fecha", "URL"
@@ -80,7 +73,7 @@ try:
             try:
                 response = scraper.get(url=full_url)
                 response.raise_for_status()
-                time.sleep(0.5) # Un pequeño delay para no saturar
+                time.sleep(0.5) 
             except (cloudscraper.exceptions.CloudflareException, requests.exceptions.RequestException) as e:
                 print(f"Error de red o Cloudflare en página {page}: {e}. Saltando página.")
                 time.sleep(10)
@@ -96,7 +89,6 @@ try:
                 print(f"No se pudo obtener el estado de Apollo para la página {page}. Saltando.")
                 continue
 
-            # Extraer los permalinks y IDs de la página de resultados
             ads_on_page = [v for v in apollo_state_list.values() if v.get('__typename') == 'AdType']
             print(f"Encontrados {len(ads_on_page)} anuncios en la página {page}.")
 
@@ -120,7 +112,7 @@ try:
                 try:
                     response2 = scraper.get(url=ad_url)
                     response2.raise_for_status()
-                    time.sleep(0.2) # Delay
+                    time.sleep(0.2) 
                 except (cloudscraper.exceptions.CloudflareException, requests.exceptions.RequestException) as e:
                     print(f"... Error de red o Cloudflare en Ad: {e}. Skip.")
                     time.sleep(10)
@@ -136,7 +128,7 @@ try:
                     print(f"... No se pudo obtener el estado de Apollo para el anuncio {ad_id}. Skip.")
                     continue
                 
-                # Buscar los datos del anuncio en el estado de Apollo
+             
                 key = f"AdType:{ad_id}"
                 ad_details = apollo_state_ad.get(key)
 
@@ -151,18 +143,18 @@ try:
                     ad_data['Precio'] = ad_details.get('price', 'N/A')
                     ad_data['Descripcion'] = ad_details.get('description', 'N/A').strip()
                     
-                    # Extraer Ubicacion
+                  
                     province_ref = ad_details.get('province', {}).get('__ref')
                     municipality_ref = ad_details.get('municipality', {}).get('__ref')
                     province_name = apollo_state_ad.get(province_ref, {}).get('name', '')
                     municipality_name = apollo_state_ad.get(municipality_ref, {}).get('name', '')
                     ad_data['Ubicacion'] = f"{municipality_name}, {province_name}".strip(', ')
 
-                    # Extraer Nombre del contacto
+                   
                     user_ref = ad_details.get('user({\"mask\":true})', {}).get('__ref')
                     ad_data['Nombre'] = apollo_state_ad.get(user_ref, {}).get('name', 'N/A')
 
-                    # Extraer Contactos
+                   
                     phone_info = ad_details.get('phoneInfo', {})
                     contactos = []
                     if phone_info:
@@ -198,7 +190,7 @@ finally:
         print(f"\nSe guardaron {len(processed_ad_ids)} IDs procesados en {processed_ids_filepath}.")
     except Exception as e:
         print(f"\nError guardando IDs procesados: {e}")
-
+ 
 print(f"\n¡Proceso completado! Se procesaron {total_ads_processed_session} anuncios nuevos en esta sesión.")
 print(f"Total de anuncios en el archivo: {len(processed_ad_ids)}.")
 print(f"Datos guardados en: {csv_filepath}")
