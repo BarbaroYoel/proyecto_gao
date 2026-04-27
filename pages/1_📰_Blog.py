@@ -10,25 +10,18 @@ current_directory = os.getcwd()
 src_path = os.path.join(current_directory, 'src')
 sys.path.append(current_directory)
 
-print(f"Parent directory: {current_directory}")
-print(f"Source path: {src_path}")
-
 import src.cleaning_data as cln
 import src.analysis as anl
 
 @st.cache_data
 def load_all_data() -> pd.DataFrame:
-    """Load and clean real estate data"""
     data_path = os.path.join(current_directory, "data", "processed", "processed.csv")
     raw_df = pd.read_csv(data_path).copy()
-    
     rental_df = cln.cleaning_data_frame_by_category(raw_df, "alquiler", min_outliner=10, max_outliner=1500)
     sale_df = cln.cleaning_data_frame_by_category(raw_df, "venta", min_outliner=1000, max_outliner=1500000)
-    
     return pd.concat([rental_df, sale_df], ignore_index=True)
 
 def load_onei_data():
-    """Load economic and demographic data"""
     onei_path = os.path.join(current_directory, "data", "external", "onei_data.json")
     with open(onei_path) as f:
         return json.load(f)
@@ -105,7 +98,8 @@ def display_blog():
         "Seleccione el tipo de mercado:",
         ("Ventas 💰", "Alquileres 🏠"),
         horizontal=True,
-        index=0
+        index=0,
+        key="market_type_radio"
     )
     
     st.subheader(f"📊 Evolución del Precio Mediano en La Habana (Ene 2024 - May 2025)")
@@ -264,8 +258,6 @@ def display_blog():
     st.write(f"""
     **🔑 Principales características para {property_label} en {transaction_label}:**
     - 🏷️ **Elementos destacados:** {anl.get_top_amenities_description(filtered_features_df)}
-    - 🏗️ **Infraestructura clave:** {anl.get_infrastructure_description(filtered_features_df)}
-    - 🌿 **Espacios valorados:** {anl.get_spaces_description(filtered_features_df)}
     """)
 
     st.header("👥 Los Actores del Mercado: Dos Realidades Paralelas")
