@@ -15,6 +15,7 @@ source = "porlalivre"
 input_filename = "porlalivre.csv"
 output_filename = "processed.csv"
 processed_ids_json = os.path.join(dir_processed, "processed_ids.json")
+
 input_path = os.path.join(dir_raw, input_filename)
 output_path = os.path.join(dir_processed, output_filename)
 

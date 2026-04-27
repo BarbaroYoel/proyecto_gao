@@ -5,6 +5,7 @@ import numpy as np
 def cleaning_data_frame_by_category(
     df: pd.DataFrame, category: str, min_outliner: int, max_outliner: int) -> pd.DataFrame:
     df=cleaning_data_frame(df)
+   
     if category == "venta" or category == "alquiler" or category=="permuta":
         df = df[(df["Categoria"] == category)].copy()
     elif category == "alquiler":
@@ -31,15 +32,19 @@ def remove_outliers(df: pd.DataFrame, min_value: int, max_value: int) -> pd.Data
 
 def clean_price(df: pd.DataFrame) -> pd.DataFrame:
     df["Precio"] = pd.to_numeric(df["Precio"], errors="coerce")
+    
     df = df[(df["Moneda"] == "USD") |(df["Moneda"] == "EUR") | (df["Moneda"] == "CUP") | (df["Moneda"] == "CUC")].copy()
+    
     conditions=[(df["Moneda"] == "EUR") , 
                 (df["Moneda"] == "CUP") , 
                 (df["Moneda"] == "CUC")]
+    
     values=[ df["Precio"]*1.1,
              df["Precio"]/360,
              df["Precio"]*1.1
             ]
     df.loc[:,"Precio"]=np.select(conditions,values,df["Precio"])
+    
     df["Moneda"] = "USD"
     return df
 
@@ -85,9 +90,10 @@ def clean_amenities(df: pd.DataFrame) -> pd.DataFrame:
         "muebles": "Amueblado"
     }
 
-    df.loc[:, "Amenidades"] = df["Amenidades"].fillna("").astype(str)
-    df.loc[:, "Amenidades"] = (
+    amenities_raw = (
         df["Amenidades"]
+        .fillna("")
+        .astype(str)
         .str.lower()
         .apply(lambda x: x.split(',') if x != "" else [])
     )
@@ -109,7 +115,8 @@ def clean_amenities(df: pd.DataFrame) -> pd.DataFrame:
                     normalized.add(clean_amenity.title())
         return sorted(normalized)
 
-    df.loc[:, "Amenidades"] = df["Amenidades"].apply(normalize_amenities)
+    # Use direct column assignment so pandas can safely switch dtype to object (lists).
+    df["Amenidades"] = amenities_raw.apply(normalize_amenities)
     return df
 
     
@@ -122,7 +129,6 @@ def clean_locations(df:pd.DataFrame)->pd.DataFrame:
             return []
     
     df["Ubicacion"] = df["Ubicacion"].apply(_clean_locations)
-    
     df["Municipio"] = df["Ubicacion"].apply(lambda x: x[0] if len(x) > 1 else None)
     df["Provincia"] = df["Ubicacion"].apply(lambda x: x[1] if len(x) > 2 else None)
 

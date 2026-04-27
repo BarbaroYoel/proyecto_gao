@@ -4,6 +4,13 @@ import Inicio as inicio
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import pandas as pd
+import plotly.express as px
+import json
+from collections import Counter
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go 
+import unicodedata
 
 parent_directory=os.getcwd()
 print(parent_directory)
@@ -135,9 +142,12 @@ def show_kpis(df:pd.DataFrame)->None:
     
     st.markdown("---")
     
-def show_specific_charts(df: pd.DataFrame) -> None:
+def show_specific_charts(df: pd.DataFrame,df_grafica:pd.DataFrame) -> None:
     st.subheader("📈 Visualizaciones Específicas de los Datos Filtrados")
     
+    
+        
+        
     if not df.empty:
         fig1 = anl.plot_price_by_municipality(df)
         st.plotly_chart(fig1, use_container_width=True)
@@ -166,15 +176,16 @@ def descubir_page():
       st.image("assets/logo.png")
       st.sidebar.title('Filtros de Búsqueda')
       category = st.radio("Seleccione la categoría:",["Alquileres","Ventas"])
-
+      
       df = load_data(category)
-     
       year_range = st.slider("Rango de Años:",2022,2025,(2022,2025))
      
-     
+      df_prueba=load_all_data()
       municipality = df['Municipio'].dropna().unique().tolist()
       seleccion_mun =st.multiselect("Municipios",municipality,default= ["Centro Habana","La Habana Vieja","Plaza de la Revolución","Cerro","Playa"])
-       
+      selc_municipality_grafica = st.radio("Seleccione Municipio:",municipality)
+      
+      
       min_price, max_price=int(df["Precio"].min()),int(df["Precio"].max())
       range_price=st.slider("Rango de Precios USD:",min_price,max_price,(min_price,max_price))
     
@@ -192,7 +203,19 @@ def descubir_page():
         ((df['Fecha'].dt.year >= year_range[0]) & 
         (df['Fecha'].dt.year <= year_range[1]))
     ]
-
+    
+    df_grafica =df_prueba[(df_prueba["Municipio"]==selc_municipality_grafica)& 
+        ((df_prueba['Fecha'].dt.year >= year_range[0]) & 
+        (df_prueba['Fecha'].dt.year <= year_range[1]))]
+   
+    # st.dataframe(df_grafica)
+    # fig=anl.grafica(df_grafica)
+    # st.plotly_chart(fig,use_container_width=True)  
+   
+    # data=anl.grafica(df_grafica)
+    # st.dataframe(data) 
+    
+    
     st.header("Explorar: Visión del Mercado Inmobiliario 🔍")
     st.markdown("---")
 
@@ -212,7 +235,8 @@ def descubir_page():
     st.markdown("---")
     
     show_kpis(df_filtered)
-    show_specific_charts(df_filtered)    
+    
+    show_specific_charts(df_filtered,df_grafica)    
 
     
 

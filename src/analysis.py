@@ -7,7 +7,44 @@ import plotly.graph_objects as go
 import unicodedata
 
 PRIMARY_COLOR_1 = "#e4ab0d"  
-PRIMARY_COLOR_2 = "#2A4A6B"  
+PRIMARY_COLOR_2 = '#1A3650' 
+
+def grafica(df_prueba:pd.DataFrame):
+    df_prueba = df_prueba[df_prueba['Tipo'].isin(['casa', 'apartamento'])&(df_prueba['Categoria']=='venta')].copy()
+    df_prueba= df_prueba[(df_prueba['Categoria']=='venta')]
+    
+    df_casa=df_prueba[(df_prueba['Tipo']=='casa')]
+    df_apartamento=df_prueba[(df_prueba['Tipo']=='apartamento')]
+    
+    
+    max_casa=df_casa["Precio"].max()
+    max_apartamento=df_apartamento["Precio"].max()
+    
+    median_casa=df_casa["Precio"].median()
+    median__apartamento=df_apartamento["Precio"].median()
+    
+    
+    min_casa=df_casa["Precio"].min()
+    min_apartamento=df_apartamento["Precio"].min()
+    
+    precio_data = { "datos": [
+    {"medida": "max", "apartamento":max_apartamento,"casa":max_casa},
+    {"medida": "median", "apartamento":median__apartamento,"casa":median_casa},
+    {"medida": "min", "apartamento":min_apartamento,"casa":min_casa},
+    ]}
+    
+    precio_data = pd.DataFrame(precio_data['datos'])
+    fig = px.bar(
+        precio_data, 
+        x='medida', 
+        y=['apartamento','casa'],
+        barmode='group',
+        title='Precio maximo , mediano y minimo',
+                 labels={'value': 'Precio (USD)', 'variable': 'Métrica'},
+                 color_discrete_sequence=[PRIMARY_COLOR_1, PRIMARY_COLOR_2]
+    )
+    return fig
+
 
 def plot_properties_by_municipality(dataframe: pd.DataFrame, top_n: int = 10):
     counts = dataframe['Municipio'].value_counts().reset_index()
@@ -50,6 +87,19 @@ def plot_property_type_distribution(dataframe: pd.DataFrame):
                  color='Tipo',
                  color_discrete_map=color_map)
     return fig
+
+    
+#  df_prueba= df_prueba[(df_prueba['Categoria']=='venta')]
+#     price_data = df_prueba.groupby('Tipo')['Precio'].agg(['max','median','min']).reset_index()
+#     price_data = price_data.sort_values('median', ascending=False)
+#     fig = px.bar(price_data, 
+#                  x=['max','median','min'], 
+#                  y='Tipo',
+#                  barmode='group',
+#                  title='Precio maximo , mediano y minimo',
+#                  labels={'value': 'Precio (USD)', 'variable': 'Métrica'},
+#                  color_discrete_sequence=[PRIMARY_COLOR_1, PRIMARY_COLOR_2])
+#     return fig
 
 def plot_price_by_municipality(dataframe: pd.DataFrame):
     """Precio promedio y mediana por municipio"""
@@ -136,13 +186,13 @@ def plot_amenities_by_property_type(dataframe: pd.DataFrame, top_n: int = 10):
     
     houses_count = pd.DataFrame(houses_counter.most_common(top_n), 
                                 columns=['Amenidad', 'Casas'])
-    
+   
     apartments_count = pd.DataFrame(apartments_counter.most_common(top_n), 
                                     columns=['Amenidad', 'Apartamentos'])
-    
+   
     comparison_data = pd.merge(houses_count, apartments_count, 
                                on='Amenidad', how='outer').fillna(0)
-    
+   
     comparison_data['Total'] = comparison_data['Casas'] + comparison_data['Apartamentos']
     comparison_data = comparison_data.sort_values('Total', ascending=False).head(top_n)
     
@@ -228,37 +278,7 @@ def get_top_amenities_description(dataframe: pd.DataFrame) -> str:
     top_amenities = [amenity for amenity, _ in amenities_counter.most_common(3)]
     return ", ".join(top_amenities)
 
-def get_infrastructure_description(dataframe: pd.DataFrame) -> str:
-    infrastructure_keywords = ['cisterna', 'tanque elevado', 'planta eléctrica', 'pozo']
-    return describe_keywords_presence(dataframe, infrastructure_keywords, "infraestructura")
 
-def get_spaces_description(dataframe: pd.DataFrame) -> str:
-    space_keywords = ['jardín', 'patio', 'terraza', 'balcón']
-    return describe_keywords_presence(dataframe, space_keywords, "espacios")
-
-def describe_keywords_presence(dataframe: pd.DataFrame, keywords: list, category_name: str) -> str:
-    if dataframe.empty:
-        return "No hay datos disponibles"
-    
-    total_properties = len(dataframe)
-    keyword_counts = {keyword: 0 for keyword in keywords}
-    
-    for amenities in dataframe['Amenidades']:
-        if isinstance(amenities, list):
-            for keyword in keywords:
-                if keyword in amenities:
-                    keyword_counts[keyword] += 1
-    
-    significant_keywords = {
-        kw: count for kw, count in keyword_counts.items() 
-        if count / total_properties >= 0.1
-    }
-    
-    if not significant_keywords:
-        return f"ninguna característica de {category_name} destacada"
-    
-    sorted_keywords = sorted(significant_keywords.items(), key=lambda x: x[1], reverse=True)
-    return ", ".join([f"{kw} ({count/total_properties:.0%})" for kw, count in sorted_keywords])
 
 def plot_amenities_distribution(dataframe: pd.DataFrame, top_n: int = 15) -> go.Figure:
     amenities_counter = Counter()
